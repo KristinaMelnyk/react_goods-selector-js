@@ -17,42 +17,40 @@ export const goods = [
 ];
 
 export const App = () => {
-  const [selectedGoods, setSelectedGoods] = useState(null);
+  const [selectedGood, setSelectedGood] = useState('Jam');
 
   return (
     <main className="section container">
-      {!selectedGoods ? (
-        <h1 className="title is-flex is-align-items-center">
-          No goods selected
-        </h1>
-      ) : (
-        <h1 className="title is-flex is-align-items-center">
-          {selectedGoods} is selected
+      <h1 className="title is-flex is-align-items-center">
+        {selectedGood ? `${selectedGood} is selected` : 'No goods selected'}
+
+        {selectedGood && (
           <button
             data-cy="ClearButton"
             type="button"
             className="delete ml-3"
-            onClick={() => setSelectedGoods(null)}
+            onClick={() => setSelectedGood('')}
           />
-        </h1>
-      )}
+        )}
+      </h1>
 
       <table className="table">
         <tbody>
           {goods.map(good => (
             <tr
               key={good}
+              data-cy="Good"
               className={classNames({
-                'has-background-success-light': selectedGoods === good,
+                'has-background-success-light': selectedGood === good,
               })}
             >
               <td>
-                {selectedGoods === good ? (
+                {selectedGood === good ? (
                   <button
                     data-cy="RemoveButton"
                     type="button"
                     className="button is-info"
-                    onClick={() => setSelectedGoods(null)}
+                    onClick={() => setSelectedGood('')}
                   >
                     -
                   </button>
@@ -61,7 +59,7 @@ export const App = () => {
                     data-cy="AddButton"
                     type="button"
                     className="button"
-                    onClick={() => setSelectedGoods(good)}
+                    onClick={() => setSelectedGood(good)}
                   >
                     +
                   </button>
