@@ -17,70 +17,62 @@ export const goods = [
 ];
 
 export const App = () => {
-  const [selectedGoods, setSelectedGoods] = useState([]);
+  const [selectedGoods, setSelectedGoods] = useState(null);
 
   return (
     <main className="section container">
-      <h1 className="title is-flex is-align-items-center">
-        {selectedGoods.length === 0
-          ? 'No goods selected'
-          : `${selectedGoods} is selected`}
-        <button
-          data-cy="ClearButton"
-          type="button"
-          className="delete ml-3"
-          disabled={selectedGoods.length === 0}
-          onClick={() => setSelectedGoods([])}
-        />
-      </h1>
+      {!selectedGoods ? (
+        <h1 className="title is-flex is-align-items-center">
+          No goods selected
+        </h1>
+      ) : (
+        <h1 className="title is-flex is-align-items-center">
+          {selectedGoods} is selected
+          <button
+            data-cy="ClearButton"
+            type="button"
+            className="delete ml-3"
+            onClick={() => setSelectedGoods(null)}
+          />
+        </h1>
+      )}
 
       <table className="table">
-        {[...goods].map(good => {
-          const isSelected = selectedGoods.includes(good);
-
-          return (
-            <tbody key={good}>
-              <tr data-cy="Good">
-                <td>
-                  {isSelected ? (
-                    <button
-                      data-cy="RemoveButton"
-                      type="button"
-                      className="button is-info"
-                      onClick={() => {
-                        setSelectedGoods(selectedGoods.filter(g => g !== good));
-                      }}
-                    >
-                      -
-                    </button>
-                  ) : (
-                    <button
-                      data-cy="AddButton"
-                      type="button"
-                      className="button"
-                      disabled={isSelected}
-                      onClick={() => {
-                        if (!isSelected && selectedGoods.length < 1) {
-                          setSelectedGoods([...selectedGoods, good]);
-                        }
-                      }}
-                    >
-                      +
-                    </button>
-                  )}
-                </td>
-                <td
-                  data-cy="GoodTitle"
-                  className={classNames('is-vcentered', {
-                    'has-background-success-light': isSelected,
-                  })}
-                >
-                  {good}
-                </td>
-              </tr>
-            </tbody>
-          );
-        })}
+        <tbody>
+          {goods.map(good => (
+            <tr
+              key={good}
+              className={classNames({
+                'has-background-success-light': selectedGoods === good,
+              })}
+            >
+              <td>
+                {selectedGoods === good ? (
+                  <button
+                    data-cy="RemoveButton"
+                    type="button"
+                    className="button is-info"
+                    onClick={() => setSelectedGoods(null)}
+                  >
+                    -
+                  </button>
+                ) : (
+                  <button
+                    data-cy="AddButton"
+                    type="button"
+                    className="button"
+                    onClick={() => setSelectedGoods(good)}
+                  >
+                    +
+                  </button>
+                )}
+              </td>
+              <td data-cy="GoodTitle" className="is-vcentered">
+                {good}
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </main>
   );
